@@ -18,6 +18,12 @@
   position: relative;
 }
 
+.quiz-image{
+  position: absolute;
+  right: 0;
+  top: -50px;
+}
+
 .quiz-question h2 {
   font-style: normal;
   font-weight: 700;
@@ -26,15 +32,11 @@
   margin-bottom: 32px;
 }
 
-.quiz-image{
-  position: absolute;
-  right: 0;
-  top: -50px;
-}
-
 .additional-info{
   margin-bottom: 5px;
   width: 100%;
   max-width: 240px;
   min-height: 100px;
 }
+
+

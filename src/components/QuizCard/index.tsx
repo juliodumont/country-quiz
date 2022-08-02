@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import "./styles.css";
 
 type Props = {
@@ -8,11 +7,8 @@ type Props = {
 };
 
 export function QuizCard(props: Props) {
-
-  const [answered, setAnswered] = useState(false);
-
   return (
-    <React.Fragment>
+    <>
       <div className="quiz-title-container">
         <h1>Country quiz</h1>
       </div>
@@ -26,6 +22,6 @@ export function QuizCard(props: Props) {
         </div>
         {props.children}
       </div>
-    </React.Fragment>
+    </>
   );
 }
