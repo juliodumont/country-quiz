@@ -11,7 +11,7 @@ export function ResultCard(props: Props) {
         <h1>Country quiz</h1>
       </div>
       <div className="result-base-card">
-        <div className="quiz-image">
+        <div className="result-image">
           <img src="src/assets/images/undraw_winners.svg" alt="" />
         </div>
         <div className="result-container">

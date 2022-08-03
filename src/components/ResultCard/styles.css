@@ -15,20 +15,19 @@
   font-size: 36px;
   text-transform: uppercase;
   color: #f2f2f2;
-  margin-right: 140px;
 }
 
 .result-container h2{
     text-align: center;
 }
 
-.quiz-image {
+.result-image{
     width: 240px;
     height: 130px;
     margin-bottom: 73px;
 }
 
-.quiz-image img{
+.result-image img{
     width: 100%;
     height: auto;
 }

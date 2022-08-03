@@ -1,26 +1,34 @@
 import { ResultCard } from "../../components/ResultCard";
-import { QuestionAnswer } from "../../components/QuestionAnswer";
 import { QuizCard } from "../../components/QuizCard";
 import "./styles.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { getQuestion } from "../../Types";
+import axios, { AxiosRequestConfig } from 'axios';
 
 const Game = () => {
   const show = false;
 
   const [gameStatus, setGameStatus] = useState({ end: false });
   const [points, setPoints] = useState(0);
+  const [currentQuestionStatus, setCurrentQuestionStatus] = useState([]);
+  const question = getQuestion();
+
+  useEffect(() => {
+    axios.get('https://restcountries.com/v3.1/all').then((response) =>{
+      console.log(response.data)
+    }).catch((error)=>{
+      console.log('Error')
+    })
+  });
+
 
   return (
     <div className="game-container">
       {!gameStatus.end ? (
         <QuizCard
-          question="Kuala Lumpur is the capital of"
+          question={question[0]}
           additionalInfo={<div></div>}
         >
-          <QuestionAnswer questionAnswer="Vietnam" questionNumber="A" />
-          <QuestionAnswer questionAnswer="Malaysia" questionNumber="B" />
-          <QuestionAnswer questionAnswer="Sweden" questionNumber="C" />
-          <QuestionAnswer questionAnswer="Austria" questionNumber="D" onClick={setGameStatus({end: true})}/>
           {show && (
             <div className="button-container">
               <button>Next</button>
@@ -35,3 +43,4 @@ const Game = () => {
 };
 
 export default Game;
+
