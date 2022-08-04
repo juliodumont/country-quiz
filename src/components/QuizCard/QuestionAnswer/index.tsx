@@ -7,22 +7,26 @@ type QuestionAnswerType = {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
+const handleClick = () => {
+  return null;
+}
+
 export function QuestionAnswer(props: QuestionAnswerType) {
-  const hasAnswered = (props.setAnswerState === 'wrong' ||props.setAnswerState === 'correct');
+  const hasAnswered = ['true', 'false', 'disabled'].includes(props.setAnswerState)
   return (
-    <div className={`question-container answer-${props.setAnswerState}`}>
+    <button className={`question-container answer-${props.setAnswerState}`} onClick={!hasAnswered ? props.onClick : handleClick}>
       <p>
-        <span className="question-number" onClick={props.onClick}>
+        <span className="question-number">
           {props.questionNumber}
         </span>
         {props.questionAnswer}
-        {hasAnswered &&
-          (props.setAnswerState === 'wrong' ? (
+        {(props.setAnswerState === 'false' ||   props.setAnswerState === 'true') &&
+          (props.setAnswerState === 'false' ? (
             <span className="material-icons answer-icon">cancel</span>
           ) : (
             <span className="material-icons answer-icon">check_circle</span>
           ))}
       </p>
-    </div>
+    </button>
   );
 }

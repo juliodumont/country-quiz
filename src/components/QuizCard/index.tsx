@@ -13,6 +13,7 @@ type Props = {
   showButton: boolean;
   onAnswerClick?: React.MouseEventHandler<HTMLButtonElement>;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
+  questionStatus: string[];
 };
 
 export function QuizCard(props: Props) {
@@ -25,13 +26,14 @@ export function QuizCard(props: Props) {
       <div className="quiz-question">
         <h2>{props.question}</h2>
       </div>
-      {props.answers.map((answer) => {
+      {props.answers.map((answer, id) => {
         return (
           <QuestionAnswer
             questionAnswer={answer.text}
             questionNumber={answer.id}
             key={answer.id}
             onClick={props.onAnswerClick}
+            setAnswerState={props.questionStatus[id]}
           />
         );
       })}

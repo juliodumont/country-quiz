@@ -15,7 +15,7 @@
   position: relative;
 }
 
-.question-container:not(:last-of-type) {
+.question-container {
   margin-bottom: 25px;
 }
 
@@ -32,8 +32,7 @@
 }
 
 
-.question-container:hover,
-.question-container:focus{
+.question-container:hover{
   color: #FFFFFF;
   background-color: #F9A826;
   border: none;
@@ -47,20 +46,20 @@
 
 /*Answer state after*/
 
-.answer-correct,
-.answer-wrong{
+.answer-true,
+.answer-false{
   color: white;
   border: none;
   cursor: unset;
 }
 
-.answer-correct,
-.answer-correct:hover{
+.answer-true,
+.answer-true:hover{
   background: #60BF88;
 }
 
-.answer-wrong,
-.answer-wrong:hover{
+.answer-false,
+.answer-false:hover{
   background: #EA8282;
 }
 

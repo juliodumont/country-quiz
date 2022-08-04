@@ -37,7 +37,13 @@ const Game = () => {
 
   const [gameStatus, setGameStatus] = useState({ start: false, end: true });
   const [points, setPoints] = useState(0); //Acho que isso não é estado
-  const [currentQuestionStatus, setCurrentQuestionStatus] = useState([]);
+  const [next, setNext] = useState(false);
+  const [currentQuestionStatus, setCurrentQuestionStatus] = useState<string[]>([
+    "unset",
+    "unset",
+    "unset",
+    "unset",
+  ]);
 
   useEffect(() => {
     //requestCountriesInfo(["europe"]);
@@ -58,13 +64,28 @@ const Game = () => {
 
   const onRegionSelectClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    console.log(event.currentTarget.textContent)
+    console.log(event.currentTarget.textContent);
   };
 
   const handleAnswerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    //SetRegion aqui
-    console.log(event.target)
+    const target = event.currentTarget;
+    const answer = target.textContent?.slice(1);
+    const questionStatus = [] as string[];
+    testQuestionSet.forEach((question) => {
+      if (question.type == false && question.text != answer) {
+        questionStatus.push("disabled");
+      } else if (question.type == true) {
+        questionStatus.push("true");
+        if(question.text == answer){
+          setPoints(points + 1);
+        }
+      } else if (question.type == false && question.text == answer) {
+        questionStatus.push("false");
+      }
+    });
+    setNext(true);
+    setCurrentQuestionStatus(questionStatus);
   };
 
   return (
@@ -82,7 +103,9 @@ const Game = () => {
             title="Country quiz"
             answers={testQuestionSet}
             question={"Brasilia is the capital of which country?"}
-            showButton={false}
+            showButton={next}
+            onAnswerClick={handleAnswerClick}
+            questionStatus={currentQuestionStatus}
           />
         )
       ) : (
