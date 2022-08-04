@@ -11,6 +11,8 @@ type Props = {
   }[];
   additionalInfo?: React.ReactNode;
   showButton: boolean;
+  onAnswerClick?: React.MouseEventHandler<HTMLButtonElement>;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export function QuizCard(props: Props) {
@@ -29,12 +31,13 @@ export function QuizCard(props: Props) {
             questionAnswer={answer.text}
             questionNumber={answer.id}
             key={answer.id}
+            onClick={props.onAnswerClick}
           />
         );
       })}
       {props.showButton && (
-        <div className="button-container">
-          <button>Next</button>
+        <div className="base-button-sm">
+          <button onClick={props.onClick}>Next</button>
         </div>
       )}
     </BaseCard>

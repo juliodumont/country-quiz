@@ -4,7 +4,7 @@ type QuestionAnswerType = {
   questionAnswer: string;
   questionNumber: string;
   setAnswerState?: string;
-  onClick?: () => void;
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 
 export function QuestionAnswer(props: QuestionAnswerType) {

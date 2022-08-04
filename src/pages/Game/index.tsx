@@ -56,6 +56,17 @@ const Game = () => {
     setGameStatus({ start: false, end: false });
   };
 
+  const onRegionSelectClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    console.log(event.currentTarget.textContent)
+  };
+
+  const handleAnswerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    //SetRegion aqui
+    console.log(event.target)
+  };
+
   return (
     <div className="game-container">
       {!gameStatus.end ? (
@@ -63,6 +74,7 @@ const Game = () => {
           <StartCard
             title="Country quiz"
             onClick={handleStartClick}
+            onRegionSelect={onRegionSelectClick}
             userMessage="Select regions:"
           />
         ) : (
