@@ -43,3 +43,8 @@
     right: 0;
     top: -50px;
   }
+
+
+.disabled-true{
+    opacity: 0.3;
+}

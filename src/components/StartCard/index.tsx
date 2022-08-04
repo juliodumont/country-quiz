@@ -6,6 +6,7 @@ type Props = {
   userMessage?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   onRegionSelect?: React.MouseEventHandler<HTMLButtonElement>;
+  active: {};
 };
 
 export function StartCard(props: Props) {
@@ -25,7 +26,7 @@ export function StartCard(props: Props) {
           <div className="regions-options-container">
             {regions.map((region) => {
               return (
-                <div className="button-container" key={region}>
+                <div className={`button-container disabled-${props.active[region.toLowerCase() as keyof typeof props.active]}`} key={region}>
                   <button className="base-button-lg" onClick={props.onRegionSelect} name={region}>
                     {region}
                   </button>
