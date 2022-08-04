@@ -1,85 +1,76 @@
-import axios from "axios";
-import { useState } from "react";
-import { CountryApiType, CountryInfo } from "Types";
+import { CountryInfo } from "Types";
+import { regionListInfo } from "./request";
 
-const BASE_URL = "https://restcountries.com/v3.1/";
-
-const TextType = [
-  "is the capital of which country?",
-  "is the currency of which country?",
-  "`s official language is...",
-  "is situated in which region?",
+const QuestionSet = [
+  { text: " is the capital of which country?", type: "capital", target: 'name'},
+  { text: " is the currency of which country?", type: "currency", target: 'name' },
+  { text: " `s official language is...", type: "language", target: 'languages' },
+  { text: " is situated in which region?", type: "region", target: 'region' },
+  { text: "Which country does this flag belong to?", type: "flag",  target: 'flag'},
 ];
 
-const AddInfoType = ["Which country does this flag belong to?"];
-
-const Questions = [TextType, AddInfoType];
-
-export function getQuestion(): string[] {
-  const questionTypeIndex = Math.floor(Math.random() * Questions.length);
-  const questionSet = Questions[questionTypeIndex];
-  const questionIndex = Math.floor(Math.random() * questionSet.length);
-  return [questionSet[questionIndex], questionTypeIndex.toString()];
-}
-
-export function getSubject(): string {
-  return "";
-}
-
-export function getAnswers(): string[] {
-  regionListInfo.forEach((region) => console.log(region.regionCountries));
-  return [];
-}
-
-type Region = {
-  region: string;
-  regionCountries: Array<CountryInfo>;
+type Answer = {
+  id: string;
+  text: string;
+  type: boolean;
 };
 
-const regionListInfo = Array<Region>();
+export type QuestionInfo = {
+  question: string;
+  additionalInfo: string | undefined;
+  answers: Answer[];
+};
 
-function requestAPIInfo(target: string): CountryInfo[] {
-  const countriesList: CountryInfo[] = [];
-  axios
-    .get(`${BASE_URL}${target}`)
-    .then((response) => {
-      response.data.forEach((country: CountryApiType) => {
-        const currentCountry = {
-          name: country.name.common,
-          capital: country.capital?.at(0) ?? "",
-          region: country.region ?? "",
-          currency: Object.keys(country.currencies).toString() ?? "",
-          flag: country.flags.svg ?? "",
-          languages: Object.values(country.languages) ?? "",
-        } as CountryInfo;
-        countriesList.push(currentCountry);
-      });
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  return countriesList;
+export function getNewQuestion(): QuestionInfo {
+  const questionInfo = {} as QuestionInfo;
+  const subject = getSubject();
+  const question = getQuestion();
+  const answers = getAnswers(subject, question.target);
+  question.type === "flag" ? question.text : subject.name + question.text;
+  questionInfo.additionalInfo = question.type === "flag" ? subject.flag : "";
+  return questionInfo;
 }
 
-export function requestCountriesInfo(regions: string[]): void {
-  regions.map((region) => {
-    if (!getCurrentStoredRegions().includes(region)) {
-      const regionInfo = {
-        region: region,
-        regionCountries:
-          region == "all"
-            ? requestAPIInfo(`/${region}`)
-            : requestAPIInfo(`/region/${region}`),
-      } as Region;
-      regionListInfo.push(regionInfo);
+function getQuestion() {
+  return QuestionSet[randomIndex(QuestionSet.length)];
+}
+
+export function getSubject(): CountryInfo {
+  const subjectRegion = regionListInfo[randomIndex(regionListInfo.length)];
+  const subjectIndex = randomIndex(subjectRegion.regionCountries.length);
+  const subject = subjectRegion.regionCountries[subjectIndex];
+  return subject;
+}
+
+export function getAnswers(answer: CountryInfo, type: string): Answer[] {
+  const questionID = ['A', 'B', 'C', 'D'];
+  //const keys = Object.keys(answer) as Array<keyof typeof answer>;
+  const questionSet = Array<Answer>();
+  const wrongAnswersId = Array<string>();
+  const correctAnswer = {
+    id: questionID[randomIndex(questionID.length)],
+    text: answer[type as keyof CountryInfo],
+    type: true
+  } as Answer
+  questionID.forEach((id) => {
+    if(id !== correctAnswer.id){
+      wrongAnswersId.push(id);
     }
-  });
+  })
+  wrongAnswersId.forEach((id) => {
+    const question = {
+      id: id,
+      text: getSubject()[type as keyof CountryInfo],
+      type: false
+    } as Answer
+    questionSet.push(question)
+  })
+  questionSet.push(correctAnswer)
+
+  console.log(questionSet)
+  return questionSet;
 }
 
-function getCurrentStoredRegions(): string[] {
-  const regions = Array<string>();
-  regionListInfo.forEach((regionInfo) => regions.push(regionInfo.region));
-  return regions;
+function randomIndex(target: number): number {
+  return Math.floor(Math.random() * target);
 }
-
-function getCountriesInfo() {}

@@ -1,0 +1,18 @@
+.base-card-container{
+    background: #FFFFFF;
+    border-radius: 24px;
+    padding: 49px 100px 33px 100px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+}
+
+.base-card-title-container h1{
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  text-transform: uppercase;
+  color: #f2f2f2;
+}
+
+

@@ -1,4 +1,3 @@
-
 export type CountryApiType = {
   name: {
     common: string;
