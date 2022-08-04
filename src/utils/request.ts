@@ -33,7 +33,7 @@ function requestAPIInfo(target: string): CountryInfo[] {
   return countriesList;
 }
 
-export function requestCountriesInfo(regions: string[]): void {
+export function requestCountriesInfo(regions: string[]): Region[] {
   regions.forEach((region) => {
     if (!getCurrentStoredRegions().includes(region)) {
       const regionInfo = {
@@ -46,6 +46,7 @@ export function requestCountriesInfo(regions: string[]): void {
       regionListInfo.push(regionInfo);
     }
   });
+  return regionListInfo;
 }
 
 function getCurrentStoredRegions(): string[] {

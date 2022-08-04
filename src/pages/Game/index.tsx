@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { CountryInfo } from "../../Types";
 import axios from "axios";
 import { getAnswers, getNewQuestion } from "../../utils/question";
-import { requestCountriesInfo } from "../../utils/request";
+import { Region, requestCountriesInfo } from "../../utils/request";
 import { StartCard } from "../../components/StartCard";
 
 const testQuestionSet = [
@@ -31,24 +31,24 @@ const testQuestionSet = [
   },
 ];
 
-
 const Game = () => {
-  const show = true;
-  const [countryList, setCountryList] = useState<CountryInfo[]>();
-
+  const [countryList, setCountryList] = useState<Region[]>();
+  const [question, setQuestion] = useState();
   const [gameStatus, setGameStatus] = useState({
     start: true,
     end: false,
     results: false,
   });
+
   const [activeRegions, setActiveRegions] = useState({
     americas: false,
     europe: false,
     asia: false,
     africa: false,
-    oceania: false
+    oceania: false,
   });
-  const [points, setPoints] = useState(0); 
+
+  const [points, setPoints] = useState(0);
   const [next, setNext] = useState(false);
   const [currentQuestionStatus, setCurrentQuestionStatus] = useState<string[]>([
     "unset",
@@ -57,49 +57,31 @@ const Game = () => {
     "unset",
   ]);
 
-  useEffect(() => {
-    //requestCountriesInfo(["europe"]);
-    //getNewQuestion();
-  }, []);
-
-  const handleTryAgainClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleRegionSelectClick = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
     event.preventDefault();
-    setPoints(0);
-    setGameStatus({ start: true, end: false, results: false });
-    setCurrentQuestionStatus([
-      "unset",
-      "unset",
-      "unset",
-      "unset",
-    ])
+    const target = event.currentTarget.textContent?.toLowerCase();
+    if (target !== undefined) {
+      const updatedRegion =
+        !activeRegions[target as keyof typeof activeRegions];
+      setActiveRegions({ ...activeRegions, [target]: updatedRegion });
+    }
   };
 
   const handleStartClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    //SetRegion aqui
-    setGameStatus({...gameStatus, start: false});
-  };
-
-  const handleNextClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    if (gameStatus.end) {
-      setGameStatus({...gameStatus, results: true});
-    }
-    /*teste*/
-    else if(!gameStatus.end){
-      setGameStatus({...gameStatus, results: true});
-    }
-  };
-  const onRegionSelectClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    const target = event.currentTarget.textContent?.toLowerCase();
-    if(target !== undefined){
-      const updatedRegion = !activeRegions[target as keyof typeof activeRegions]
-      setActiveRegions({...activeRegions, [target]: updatedRegion})
-    }
+    const regions = Object.keys(activeRegions).filter((key) => {
+      if (!activeRegions[key as keyof typeof activeRegions]) {
+        return key;
+      }
+    });
+    setCountryList(requestCountriesInfo(regions));
+    setGameStatus({ ...gameStatus, start: false });
   };
 
   const handleAnswerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log(countryList);
     event.preventDefault();
     const target = event.currentTarget;
     const answer = target.textContent?.slice(1);
@@ -114,11 +96,28 @@ const Game = () => {
         }
       } else if (question.type == false && question.text == answer) {
         questionStatus.push("false");
-        setGameStatus({...gameStatus, end: true});
+        setGameStatus({ ...gameStatus, end: true });
       }
     });
     setNext(true);
     setCurrentQuestionStatus(questionStatus);
+  };
+
+  const handleNextClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (gameStatus.end) {
+      setGameStatus({ ...gameStatus, results: true });
+    } else if (!gameStatus.end) {
+      /*teste*/
+      setGameStatus({ ...gameStatus, results: true });
+    }
+  };
+
+  const handleTryAgainClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setPoints(0);
+    setGameStatus({ start: true, end: false, results: false });
+    setCurrentQuestionStatus(["unset", "unset", "unset", "unset"]);
   };
 
   return (
@@ -128,7 +127,7 @@ const Game = () => {
           <StartCard
             title="Country quiz"
             onClick={handleStartClick}
-            onRegionSelect={onRegionSelectClick}
+            onRegionSelect={handleRegionSelectClick}
             userMessage="Select regions:"
             active={activeRegions}
           />
