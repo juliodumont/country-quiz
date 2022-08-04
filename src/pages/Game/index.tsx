@@ -35,7 +35,7 @@ const Game = () => {
   const show = true;
   const [countryList, setCountryList] = useState<CountryInfo[]>();
 
-  const [gameStatus, setGameStatus] = useState({ start: true, end: false });
+  const [gameStatus, setGameStatus] = useState({ start: false, end: true });
   const [points, setPoints] = useState(0); //Acho que isso não é estado
   const [currentQuestionStatus, setCurrentQuestionStatus] = useState([]);
 
@@ -44,11 +44,27 @@ const Game = () => {
     //getNewQuestion();
   }, []);
 
+  const handleTryAgainClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setPoints(0);
+    setGameStatus({ start: true, end: false });
+  };
+
+  const handleStartClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    //SetRegion aqui
+    setGameStatus({ start: false, end: false });
+  };
+
   return (
     <div className="game-container">
       {!gameStatus.end ? (
         gameStatus.start ? (
-          <StartCard />
+          <StartCard
+            title="Country quiz"
+            onClick={handleStartClick}
+            userMessage="Select regions:"
+          />
         ) : (
           <QuizCard
             title="Country quiz"
@@ -58,7 +74,11 @@ const Game = () => {
           />
         )
       ) : (
-        <ResultCard correctAnswers={points} />
+        <ResultCard
+          title="Country quiz"
+          correctAnswers={points}
+          onClick={handleTryAgainClick}
+        />
       )}
     </div>
   );

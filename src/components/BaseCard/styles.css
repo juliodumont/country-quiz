@@ -1,7 +1,6 @@
 .base-card-container{
     background: #FFFFFF;
     border-radius: 24px;
-    padding: 49px 100px 33px 100px;
     display: flex;
     align-items: center;
     flex-direction: column;
