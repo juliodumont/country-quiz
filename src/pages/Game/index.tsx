@@ -4,6 +4,7 @@ import "./styles.css";
 import { useEffect, useState } from "react";
 import { CountryInfo } from "../../Types";
 import axios from "axios";
+import { requestCountriesInfo } from "../../utils/question";
 
 const testQuestionSet = [
   {
@@ -25,36 +26,15 @@ const testQuestionSet = [
 ];
 
 const Game = () => {
-  const show = false;
+  const show = true;
   const [countryList, setCountryList] = useState<CountryInfo[]>();
 
-  const [gameStatus, setGameStatus] = useState({ end: false });
+  const [gameStatus, setGameStatus] = useState({ end: true });
   const [points, setPoints] = useState(0);//Acho que isso não é estado
   const [currentQuestionStatus, setCurrentQuestionStatus] = useState([]);
 
   useEffect(() => {
-    const countries: CountryInfo[] = [];
-    axios
-      .get("https://restcountries.com/v3.1/all")
-      .then((response) => {
-        response.data.forEach((country: CountryInfo) => {
-          const currentCountry = {
-            name: country.name,
-            languages: country.languages,
-            flags: country.flags,
-            capital: country.capital,
-            region: country.region,
-            currencies: country.currencies,
-          } as CountryInfo;
-          countries.push(currentCountry);
-        });
-      })
-      .catch((error) => {
-        console.log("Error");
-      })
-      .finally(() => {
-        setCountryList(countries);
-      });
+    console.log(requestCountriesInfo(['americas']));
   }, []);
 
   return (
