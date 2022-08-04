@@ -4,7 +4,7 @@ import "./styles.css";
 import { useEffect, useState } from "react";
 import { CountryInfo } from "../../Types";
 import axios from "axios";
-import { requestCountriesInfo } from "../../utils/question";
+import { getAnswers, requestCountriesInfo } from "../../utils/question";
 
 const testQuestionSet = [
   {
@@ -34,7 +34,8 @@ const Game = () => {
   const [currentQuestionStatus, setCurrentQuestionStatus] = useState([]);
 
   useEffect(() => {
-    const country = requestCountriesInfo(['europe']);
+    requestCountriesInfo(['europe']);
+    getAnswers();
   }, []);
 
   return (

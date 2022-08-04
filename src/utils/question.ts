@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useState } from "react";
 import { CountryApiType, CountryInfo } from "Types";
 
 const BASE_URL = "https://restcountries.com/v3.1/";
@@ -26,17 +27,16 @@ export function getSubject(): string {
 }
 
 export function getAnswers(): string[] {
+  regionListInfo.forEach((region) => console.log(region.regionCountries));
   return [];
 }
-
-
 
 type Region = {
   region: string;
   regionCountries: Array<CountryInfo>;
 };
 
-const countryListInfo = [] as Region[];
+const regionListInfo = Array<Region>();
 
 function requestAPIInfo(target: string): CountryInfo[] {
   const countriesList: CountryInfo[] = [];
@@ -46,11 +46,11 @@ function requestAPIInfo(target: string): CountryInfo[] {
       response.data.forEach((country: CountryApiType) => {
         const currentCountry = {
           name: country.name.common,
-          capital: country.capital?.at(0) ?? '',
-          region: country.region ?? '',
-          currency: Object.keys(country.currencies).toString() ?? '',
-          flag: country.flags.svg ?? '',
-          languages: Object.values(country.languages) ?? ''
+          capital: country.capital?.at(0) ?? "",
+          region: country.region ?? "",
+          currency: Object.keys(country.currencies).toString() ?? "",
+          flag: country.flags.svg ?? "",
+          languages: Object.values(country.languages) ?? "",
         } as CountryInfo;
         countriesList.push(currentCountry);
       });
@@ -61,17 +61,25 @@ function requestAPIInfo(target: string): CountryInfo[] {
   return countriesList;
 }
 
-export function requestCountriesInfo(regions: string[]) : Region[] {
-  const countriesList = [] as Region[];
+export function requestCountriesInfo(regions: string[]): void {
   regions.map((region) => {
-    const regionInfo = {
-      region: region,
-      regionCountries:
-        region == "all"
-          ? requestAPIInfo(`/${region}`)
-          : requestAPIInfo(`/region/${region}`),
-    } as Region;
-    countriesList.push(regionInfo);
+    if (!getCurrentStoredRegions().includes(region)) {
+      const regionInfo = {
+        region: region,
+        regionCountries:
+          region == "all"
+            ? requestAPIInfo(`/${region}`)
+            : requestAPIInfo(`/region/${region}`),
+      } as Region;
+      regionListInfo.push(regionInfo);
+    }
   });
-  return countriesList;
 }
+
+function getCurrentStoredRegions(): string[] {
+  const regions = Array<string>();
+  regionListInfo.forEach((regionInfo) => regions.push(regionInfo.region));
+  return regions;
+}
+
+function getCountriesInfo() {}
