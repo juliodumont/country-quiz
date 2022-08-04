@@ -34,7 +34,7 @@ const Game = () => {
   const [currentQuestionStatus, setCurrentQuestionStatus] = useState([]);
 
   useEffect(() => {
-    console.log(requestCountriesInfo(['americas']));
+    const country = requestCountriesInfo(['europe']);
   }, []);
 
   return (

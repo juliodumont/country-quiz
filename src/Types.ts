@@ -16,9 +16,9 @@ export type CountryApiType = {
 
 export type CountryInfo = {
   name: string | undefined;
-  currencies: string | undefined;
+  currency: string | undefined;
   capital: string | undefined;
   region: string | undefined;
   flag: string | undefined;
-  language: string | undefined;
+  languages: string[] | undefined;
 }
