@@ -8,49 +8,43 @@ export type Region = {
   regionCountries: Array<CountryInfo>;
 };
 
-export const regionListInfo = Array<Region>();
+export function requestAPIInfo(
+  set: React.Dispatch<React.SetStateAction<Region[]>>
+) {
+  const regions = [
+    { region: "americas", regionCountries: [] as CountryInfo[] },
+    { region: "europe", regionCountries: [] as CountryInfo[] },
+    { region: "asia", regionCountries: [] as CountryInfo[] },
+    { region: "africa", regionCountries: [] as CountryInfo[] },
+    { region: "oceania", regionCountries: [] as CountryInfo[] },
+  ] as Region[];
 
-function requestAPIInfo(target: string): CountryInfo[] {
-  const countriesList: CountryInfo[] = [];
   axios
-    .get(`${BASE_URL}${target}`)
+    .get(`https://restcountries.com/v3.1/all`)
     .then((response) => {
       response.data.forEach((country: CountryApiType) => {
-        const currentCountry = {
-          name: country.name.common,
-          capital: country.capital?.at(0) ?? "",
-          region: country.region ?? "",
-          currency: Object.keys(country.currencies).toString() ?? "",
-          flag: country.flags.svg ?? "",
-          languages: Object.values(country.languages) ?? "",
-        } as CountryInfo;
-        countriesList.push(currentCountry);
+        if (country.region != "Antarctic") {
+          const countryInformation = getCurrentCountryInfo(country);
+          regions.forEach((region) => {
+            if (region.region === countryInformation.region) {
+              region.regionCountries.push(countryInformation);
+            }
+          });
+        }
       });
+      set(regions);
     })
-    .catch((error) => {
-      console.log(error);
-    });
-  return countriesList;
+    .catch((error) => console.log(error));
 }
 
-export function requestCountriesInfo(regions: string[]): Region[] {
-  regions.forEach((region) => {
-    if (!getCurrentStoredRegions().includes(region)) {
-      const regionInfo = {
-        region: region,
-        regionCountries:
-          region == "all"
-            ? requestAPIInfo(`/${region}`)
-            : requestAPIInfo(`/region/${region}`),
-      } as Region;
-      regionListInfo.push(regionInfo);
-    }
-  });
-  return regionListInfo;
-}
-
-function getCurrentStoredRegions(): string[] {
-  const regions = Array<string>();
-  regionListInfo.forEach((regionInfo) => regions.push(regionInfo.region));
-  return regions;
+function getCurrentCountryInfo(country: CountryApiType): CountryInfo {
+  const currentCountry = {
+    name: country.name.common ?? "",
+    capital: country.capital?.at(0) ?? "",
+    region: country.region.toLowerCase() ?? "",
+    currency: Object.keys(country.currencies).toString() ?? "",
+    flag: country.flags.svg ?? "",
+    languages: Object.values(country.languages) ?? "",
+  } as CountryInfo;
+  return currentCountry;
 }

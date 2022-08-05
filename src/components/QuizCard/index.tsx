@@ -26,7 +26,7 @@ export function QuizCard(props: Props) {
       <div className="quiz-question">
         <h2>{props.question}</h2>
       </div>
-      {props.answers.map((answer, id) => {
+      {props.answers && props.answers.map((answer, id) => {
         return (
           <QuestionAnswer
             questionAnswer={answer.text}

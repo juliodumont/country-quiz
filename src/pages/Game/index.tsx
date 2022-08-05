@@ -2,38 +2,21 @@ import { ResultCard } from "../../components/ResultCard";
 import { QuizCard } from "../../components/QuizCard";
 import "./styles.css";
 import { useEffect, useState } from "react";
-import { CountryInfo } from "../../Types";
-import axios from "axios";
-import { getAnswers, getNewQuestion } from "../../utils/question";
-import { Region, requestCountriesInfo } from "../../utils/request";
+import { Answer, getNewQuestion, QuestionInfo } from "../../utils/question";
+import { Region, requestAPIInfo } from "../../utils/request";
 import { StartCard } from "../../components/StartCard";
 
-const testQuestionSet = [
-  {
-    id: "A",
-    text: "Brazil",
-    type: true,
-  },
-  {
-    id: "B",
-    text: "United States",
-    type: false,
-  },
-  {
-    id: "C",
-    text: "Italy",
-    type: false,
-  },
-  {
-    id: "D",
-    text: "Argentina",
-    type: false,
-  },
-];
-
 const Game = () => {
-  const [countryList, setCountryList] = useState<Region[]>();
-  const [question, setQuestion] = useState();
+  const [countryList, setCountryList] = useState<Region[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [question, setQuestion] = useState<QuestionInfo>({
+    question: "",
+    additionalInfo: "",
+    answers: [] as Answer[],
+  });
+  const [points, setPoints] = useState(0);
+  const [next, setNext] = useState(false);
+
   const [gameStatus, setGameStatus] = useState({
     start: true,
     end: false,
@@ -48,8 +31,14 @@ const Game = () => {
     oceania: false,
   });
 
-  const [points, setPoints] = useState(0);
-  const [next, setNext] = useState(false);
+  useEffect(() => {
+    if (!countryList.length) {
+      requestAPIInfo(setCountryList);
+    }else{
+      setIsLoading(false);
+    }
+  }, [countryList]);
+
   const [currentQuestionStatus, setCurrentQuestionStatus] = useState<string[]>([
     "unset",
     "unset",
@@ -71,13 +60,10 @@ const Game = () => {
 
   const handleStartClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    const regions = Object.keys(activeRegions).filter((key) => {
-      if (!activeRegions[key as keyof typeof activeRegions]) {
-        return key;
-      }
-    });
-    setCountryList(requestCountriesInfo(regions));
-    setGameStatus({ ...gameStatus, start: false });
+    if(countryList){
+      setGameStatus({ ...gameStatus, start: false });
+      setQuestion(getNewQuestion(countryList));
+    }
   };
 
   const handleAnswerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -86,13 +72,14 @@ const Game = () => {
     const target = event.currentTarget;
     const answer = target.textContent?.slice(1);
     const questionStatus = [] as string[];
-    testQuestionSet.forEach((question) => {
+    const questionSetAnswers = question?.answers;
+    questionSetAnswers?.forEach((question) => {
       if (question.type == false && question.text != answer) {
         questionStatus.push("disabled");
       } else if (question.type == true) {
         questionStatus.push("true");
         if (question.text == answer) {
-          setPoints(points + 1);
+          setPoints((prev) => prev + 1);
         }
       } else if (question.type == false && question.text == answer) {
         questionStatus.push("false");
@@ -101,6 +88,7 @@ const Game = () => {
     });
     setNext(true);
     setCurrentQuestionStatus(questionStatus);
+    setQuestion(getNewQuestion(countryList));
   };
 
   const handleNextClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -127,15 +115,17 @@ const Game = () => {
           <StartCard
             title="Country quiz"
             onClick={handleStartClick}
-            onRegionSelect={handleRegionSelectClick}
+            onSelect={handleRegionSelectClick}
             userMessage="Select regions:"
             active={activeRegions}
+            options={["Americas", "Europe", "Asia", "Africa", "Oceania"]}
+            isLoading={isLoading}
           />
         ) : (
           <QuizCard
             title="Country quiz"
-            answers={testQuestionSet}
-            question={"Brasilia is the capital of which country?"}
+            answers={question?.answers}
+            question={question?.question}
             showButton={next}
             onAnswerClick={handleAnswerClick}
             onClick={handleNextClick}

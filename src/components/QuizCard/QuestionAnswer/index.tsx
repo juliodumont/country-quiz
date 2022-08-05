@@ -3,7 +3,7 @@ import "./styles.css";
 type QuestionAnswerType = {
   questionAnswer: string;
   questionNumber: string;
-  setAnswerState?: string;
+  setAnswerState: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 };
 

@@ -5,12 +5,13 @@ type Props = {
   title?: string;
   userMessage?: string;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  onRegionSelect?: React.MouseEventHandler<HTMLButtonElement>;
+  onSelect?: React.MouseEventHandler<HTMLButtonElement>;
+  options: string[];
   active: {};
+  isLoading: boolean;
 };
 
 export function StartCard(props: Props) {
-  const regions = ["Americas", "Europe", "Asia", "Africa", "Oceania"];
   return (
     <BaseCard className="start-card" title={props.title}>
       <div className="quiz-image">
@@ -24,19 +25,38 @@ export function StartCard(props: Props) {
       <div>
         <div className="start-button-container">
           <div className="regions-options-container">
-            {regions.map((region) => {
+            {props.options.map((region) => {
               return (
-                <div className={`button-container disabled-${props.active[region.toLowerCase() as keyof typeof props.active]}`} key={region}>
-                  <button className="base-button-lg" onClick={props.onRegionSelect} name={region}>
+                <div
+                  className={`button-container disabled-${
+                    props.active[
+                      region.toLowerCase() as keyof typeof props.active
+                    ]
+                  }`}
+                  key={region}
+                >
+                  <button
+                    className="base-button-lg"
+                    onClick={props.onSelect}
+                    name={region}
+                  >
                     {region}
                   </button>
                 </div>
               );
             })}
           </div>
-          <div className="base-button-sm">
-            <button onClick={props.onClick}>Start</button>
-          </div>
+          {props.isLoading ? (
+            <div className="base-button-sm">
+              <button onClick={props.onClick} disabled>
+                Aguarde...
+              </button>
+            </div>
+          ) : (
+            <div className="base-button-sm">
+              <button onClick={props.onClick}>Start</button>
+            </div>
+          )}
         </div>
       </div>
     </BaseCard>
