@@ -9,9 +9,25 @@
 .base-card-title-container h1{
   font-style: normal;
   font-weight: 700;
-  font-size: 36px;
+  font-size: 22px;
   text-transform: uppercase;
   color: #f2f2f2;
 }
 
+@media screen and (min-width: 576px) {
+  .base-card-title-container h1{
+    font-size: 28px;
+  }
+}
 
+@media screen and (min-width: 768px) {
+  .base-card-title-container h1{
+    font-size: 32px;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  .base-card-title-container h1{
+    font-size: 36px;
+  }
+}
