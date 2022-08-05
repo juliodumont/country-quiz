@@ -17,12 +17,12 @@ const QuestionSet = [
     type: "name",
     target: "languages",
   },
-  { text: " is situated in which region?", type: "name", target: "region" },
   {
     text: "Which country does this flag belong to?",
     type: "flag",
     target: "name",
   },
+  { text: " is situated in which region?", type: "name", target: "region" },
 ];
 
 export type Answer = {
@@ -40,7 +40,7 @@ export type QuestionInfo = {
 export function getNewQuestion(regionSet: Region[]): QuestionInfo {
   const questionInfo = {} as QuestionInfo;
   const subject = getSubject(regionSet);
-  const question = getQuestion();
+  const question = getQuestion(regionSet.length > 2 ? true : false);
   questionInfo.answers = getAnswers(subject, question.target, regionSet);
   questionInfo.question =
     question.type === "flag"
@@ -50,8 +50,10 @@ export function getNewQuestion(regionSet: Region[]): QuestionInfo {
   return questionInfo;
 }
 
-function getQuestion() {
-  return QuestionSet[randomIndex(QuestionSet.length)];
+function getQuestion(includeRegion: boolean) {
+  return includeRegion
+    ? QuestionSet[randomIndex(QuestionSet.length)]
+    : QuestionSet[randomIndex(QuestionSet.length - 1)];
 }
 
 export function getSubject(regionSet: Region[]): CountryInfo {
@@ -75,7 +77,6 @@ export function getAnswers(
     text: answer[type as keyof CountryInfo],
     type: true,
   } as Answer;
-
   currentSet.push(correctAnswer.text);
   questionID.forEach((id) => {
     if (id !== correctAnswer.id) {
@@ -83,24 +84,31 @@ export function getAnswers(
     }
   });
 
-  do{
+  do {
     const question = {
       id: wrongAnswersId[0],
       text: getSubject(regions)[type as keyof CountryInfo],
       type: false,
     } as Answer;
 
-    if(!currentSet.includes(question.text)){
+    if (type == "region" && regions.length < 4) {
+      const regions = ["americas", "europe", "asia", "africa", "oceania"];
+      question.text = regions[randomIndex(regions.length)];
+    }
+
+    if (!currentSet.includes(question.text)) {
       currentSet.push(question.text);
       answerSet.push(question);
-      wrongAnswersId.shift()
+      wrongAnswersId.shift();
     }
-  }while(wrongAnswersId.length)
-  console.log(answerSet, currentSet)
-
-
+  } while (wrongAnswersId.length);
   answerSet.push(correctAnswer);
   answerSet.sort((a, b) => a.id.charCodeAt(0) - b.id.charCodeAt(0));
+  if (type == "region") {
+    answerSet.forEach((answer) => {
+      answer.text = answer.text[0].toUpperCase() + answer.text.substring(1);
+    });
+  }
   return answerSet;
 }
 

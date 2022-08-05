@@ -34,7 +34,7 @@ const Game = () => {
   useEffect(() => {
     if (!countryList.length) {
       requestAPIInfo(setCountryList);
-    }else{
+    } else {
       setIsLoading(false);
     }
   }, [countryList]);
@@ -60,10 +60,13 @@ const Game = () => {
 
   const handleStartClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    if(countryList){
-      setGameStatus({ ...gameStatus, start: false });
-      setQuestion(getNewQuestion(countryList));
-    }
+    const activeRegionsCountryList = countryList.filter((country => {
+      const regionKey = country.region as keyof typeof activeRegions;
+      return !activeRegions[regionKey] ? country : null;
+    }));
+    setGameStatus({ ...gameStatus, start: false });
+    console.log(activeRegionsCountryList)
+    setQuestion(getNewQuestion(activeRegionsCountryList));
   };
 
   const handleAnswerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -105,6 +108,7 @@ const Game = () => {
     setPoints(0);
     setGameStatus({ start: true, end: false, results: false });
     setCurrentQuestionStatus(["unset", "unset", "unset", "unset"]);
+    setNext(false);
   };
 
   return (

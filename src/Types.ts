@@ -19,5 +19,5 @@ export type CountryInfo = {
   capital: string | undefined;
   region: string | undefined;
   flag: string | undefined;
-  languages: string[] | undefined;
+  languages: string | undefined;
 }

@@ -46,8 +46,8 @@ function getCurrentCountryInfo(country: CountryApiType): CountryInfo {
     flag: country.flags.svg ?? "",
     languages:
       Object.values(country.languages).length > 1
-        ? [Object.values(country.languages).slice(0, 2).join(", ")]
-        : [Object.values(country.languages).join(", ")],
+        ? Object.values(country.languages).slice(0, 2).join(", ")
+        : Object.values(country.languages).join(", "),
   } as CountryInfo;
   return currentCountry;
 }
