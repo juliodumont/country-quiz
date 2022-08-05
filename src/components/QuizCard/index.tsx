@@ -9,7 +9,7 @@ type Props = {
     id: string;
     text: string;
   }[];
-  additionalInfo?: React.ReactNode;
+  additionalInfo?: string;
   showButton: boolean;
   onAnswerClick?: React.MouseEventHandler<HTMLButtonElement>;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
@@ -22,21 +22,26 @@ export function QuizCard(props: Props) {
       <div className="quiz-image">
         <img src="./src/assets/images/undraw_adventure.svg" alt="Adventure" />
       </div>
-      <div className="additional-info">{props.additionalInfo}</div>
+      <div className="additional-info">
+        {props.additionalInfo && (
+          <img src={props.additionalInfo} alt="A flag" />
+        )}
+      </div>
       <div className="quiz-question">
         <h2>{props.question}</h2>
       </div>
-      {props.answers && props.answers.map((answer, id) => {
-        return (
-          <QuestionAnswer
-            questionAnswer={answer.text}
-            questionNumber={answer.id}
-            key={answer.id}
-            onClick={props.onAnswerClick}
-            setAnswerState={props.questionStatus[id]}
-          />
-        );
-      })}
+      {props.answers &&
+        props.answers.map((answer, id) => {
+          return (
+            <QuestionAnswer
+              questionAnswer={answer.text}
+              questionNumber={answer.id}
+              key={answer.id}
+              onClick={props.onAnswerClick}
+              setAnswerState={props.questionStatus[id]}
+            />
+          );
+        })}
       {props.showButton && (
         <div className="base-button-sm">
           <button onClick={props.onClick}>Next</button>

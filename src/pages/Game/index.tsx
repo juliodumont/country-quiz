@@ -67,7 +67,6 @@ const Game = () => {
   };
 
   const handleAnswerClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(countryList);
     event.preventDefault();
     const target = event.currentTarget;
     const answer = target.textContent?.slice(1);
@@ -88,7 +87,6 @@ const Game = () => {
     });
     setNext(true);
     setCurrentQuestionStatus(questionStatus);
-    setQuestion(getNewQuestion(countryList));
   };
 
   const handleNextClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -97,7 +95,8 @@ const Game = () => {
       setGameStatus({ ...gameStatus, results: true });
     } else if (!gameStatus.end) {
       /*teste*/
-      setGameStatus({ ...gameStatus, results: true });
+      setQuestion(getNewQuestion(countryList));
+      setCurrentQuestionStatus(["unset", "unset", "unset", "unset"]);
     }
   };
 
@@ -130,6 +129,7 @@ const Game = () => {
             onAnswerClick={handleAnswerClick}
             onClick={handleNextClick}
             questionStatus={currentQuestionStatus}
+            additionalInfo={question.additionalInfo}
           />
         )
       ) : (

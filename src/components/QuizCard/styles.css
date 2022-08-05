@@ -5,6 +5,7 @@
   padding: 48px 32px 68px 32px;
   width: 100%;
   position: relative;
+  align-items: unset;
 }
 
 .quiz-image{
@@ -24,8 +25,12 @@
 .additional-info{
   margin-bottom: 5px;
   width: 100%;
-  max-width: 240px;
-  min-height: 100px;
+  max-width: 130px;
+  min-height: 80px;
 }
 
-
+.additional-info img{
+  left: 0;
+  width: 100%;
+  height: auto;
+}

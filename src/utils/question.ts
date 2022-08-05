@@ -13,11 +13,11 @@ const QuestionSet = [
     target: "name",
   },
   {
-    text: " `s official language is...",
-    type: "language",
+    text: "'s official language is...",
+    type: "name",
     target: "languages",
   },
-  { text: " is situated in which region?", type: "region", target: "region" },
+  { text: " is situated in which region?", type: "name", target: "region" },
   {
     text: "Which country does this flag belong to?",
     type: "flag",
@@ -57,16 +57,13 @@ function getQuestion() {
 
 export function getSubject(regionSet: Region[]): CountryInfo {
   const subjectRegion = regionSet[randomIndex(regionSet.length)];
-  console.log(subjectRegion?.regionCountries.length)
   const subjectIndex = randomIndex(subjectRegion?.regionCountries.length);
   const subject = subjectRegion.regionCountries[subjectIndex + 1];
-  console.log(subjectRegion, subjectIndex, subject);
   return subject;
 }
 
 export function getAnswers(answer: CountryInfo, type: string, regions: Region[]): Answer[] {
   const questionID = ["A", "B", "C", "D"];
-  //const keys = Object.keys(answer) as Array<keyof typeof answer>;
   const questionSet = Array<Answer>();
   const wrongAnswersId = Array<string>();
   const correctAnswer = {
@@ -88,8 +85,7 @@ export function getAnswers(answer: CountryInfo, type: string, regions: Region[])
     questionSet.push(question);
   });
   questionSet.push(correctAnswer);
-
-  console.log(questionSet);
+  questionSet.sort((a,b)=> a.id.charCodeAt(0) - b.id.charCodeAt(0));
   return questionSet;
 }
 
