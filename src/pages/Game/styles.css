@@ -37,3 +37,9 @@
     font-size: 18px;
   }
 }
+
+@media screen and (max-height: 576px) {
+  .base-button-sm{
+    margin-top: -100px;
+  }
+}

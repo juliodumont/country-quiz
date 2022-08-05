@@ -133,3 +133,18 @@
     margin-bottom: 60px;
   }
 }
+
+@media screen and (max-height: 576px) {
+  .start-card {
+    height: 325px;
+  }
+
+  .user-message {
+    margin-bottom: 10px;
+  }
+
+  .regions-options-container {
+    gap: 10px;
+  }
+
+}

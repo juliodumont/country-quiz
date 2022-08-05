@@ -44,7 +44,7 @@ export function QuizCard(props: Props) {
         })}
       {props.showButton && (
         <div className="base-button-sm">
-          <button onClick={props.onClick}>Next</button>
+          <button className="q-button-sm" onClick={props.onClick}>Next</button>
         </div>
       )}
     </BaseCard>

@@ -115,3 +115,23 @@
     height: 62px;
   }
 }
+
+@media screen and (max-height: 576px) {
+  .result-card {
+    height: 400px;
+  }
+  .result-image {
+    width: 170px;
+    height: 130px;
+    margin-bottom: 13px;
+  }
+
+  .result-container h2 {
+    font-size: 38px;
+  }
+
+  .result {
+    font-size: 18px;
+    margin-bottom: 21px;
+  }
+}

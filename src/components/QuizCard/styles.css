@@ -76,3 +76,26 @@
     font-size: 24px;
   }
 }
+
+
+@media screen and (max-height: 576px) {
+  .quiz-card {
+    min-height: 325px;
+    padding: 10px 32px 8px 32px;
+  }
+  .quiz-question h2 {
+    margin-bottom: 5px;
+  }
+
+  .quiz-image{
+    top: -20px;
+  }
+
+  .additional-info{
+    min-height: 50px;
+  }
+
+  .base-button-sm > .q-button-sm{
+    margin-top: 100px;
+  }
+}

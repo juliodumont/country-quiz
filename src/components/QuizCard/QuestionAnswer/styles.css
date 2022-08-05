@@ -98,3 +98,10 @@
     font-size: 18px;
   }
 }
+
+@media screen and (max-height: 576px) {
+  .question-container {
+    margin-bottom: 7px;
+    height: 45px;
+  }
+}
