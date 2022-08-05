@@ -1,5 +1,5 @@
 import { CountryInfo } from "Types";
-import { Region} from "./request";
+import { Region } from "./request";
 
 const QuestionSet = [
   {
@@ -13,7 +13,7 @@ const QuestionSet = [
     target: "name",
   },
   {
-    text: "'s official language is...",
+    text: "'s official languages:",
     type: "name",
     target: "languages",
   },
@@ -45,8 +45,7 @@ export function getNewQuestion(regionSet: Region[]): QuestionInfo {
   questionInfo.question =
     question.type === "flag"
       ? question.text
-      : subject[question.type as keyof typeof subject] +
-        question.text;
+      : subject[question.type as keyof typeof subject] + question.text;
   questionInfo.additionalInfo = question.type === "flag" ? subject.flag : "";
   return questionInfo;
 }
@@ -58,35 +57,51 @@ function getQuestion() {
 export function getSubject(regionSet: Region[]): CountryInfo {
   const subjectRegion = regionSet[randomIndex(regionSet.length)];
   const subjectIndex = randomIndex(subjectRegion?.regionCountries.length);
-  const subject = subjectRegion.regionCountries[subjectIndex + 1];
+  const subject = subjectRegion.regionCountries[subjectIndex];
   return subject;
 }
 
-export function getAnswers(answer: CountryInfo, type: string, regions: Region[]): Answer[] {
+export function getAnswers(
+  answer: CountryInfo,
+  type: string,
+  regions: Region[]
+): Answer[] {
   const questionID = ["A", "B", "C", "D"];
-  const questionSet = Array<Answer>();
+  const answerSet = Array<Answer>();
   const wrongAnswersId = Array<string>();
+  const currentSet = [] as string[];
   const correctAnswer = {
     id: questionID[randomIndex(questionID.length)],
     text: answer[type as keyof CountryInfo],
     type: true,
   } as Answer;
+
+  currentSet.push(correctAnswer.text);
   questionID.forEach((id) => {
     if (id !== correctAnswer.id) {
       wrongAnswersId.push(id);
     }
   });
-  wrongAnswersId.forEach((id) => {
+
+  do{
     const question = {
-      id: id,
+      id: wrongAnswersId[0],
       text: getSubject(regions)[type as keyof CountryInfo],
       type: false,
     } as Answer;
-    questionSet.push(question);
-  });
-  questionSet.push(correctAnswer);
-  questionSet.sort((a,b)=> a.id.charCodeAt(0) - b.id.charCodeAt(0));
-  return questionSet;
+
+    if(!currentSet.includes(question.text)){
+      currentSet.push(question.text);
+      answerSet.push(question);
+      wrongAnswersId.shift()
+    }
+  }while(wrongAnswersId.length)
+  console.log(answerSet, currentSet)
+
+
+  answerSet.push(correctAnswer);
+  answerSet.sort((a, b) => a.id.charCodeAt(0) - b.id.charCodeAt(0));
+  return answerSet;
 }
 
 function randomIndex(target: number): number {

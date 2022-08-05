@@ -94,7 +94,7 @@ const Game = () => {
     if (gameStatus.end) {
       setGameStatus({ ...gameStatus, results: true });
     } else if (!gameStatus.end) {
-      /*teste*/
+      setNext(false);
       setQuestion(getNewQuestion(countryList));
       setCurrentQuestionStatus(["unset", "unset", "unset", "unset"]);
     }

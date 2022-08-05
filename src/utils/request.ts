@@ -44,7 +44,10 @@ function getCurrentCountryInfo(country: CountryApiType): CountryInfo {
     region: country.region.toLowerCase() ?? "",
     currency: Object.keys(country.currencies).toString() ?? "",
     flag: country.flags.svg ?? "",
-    languages: Object.values(country.languages) ?? "",
+    languages:
+      Object.values(country.languages).length > 1
+        ? [Object.values(country.languages).slice(0, 2).join(", ")]
+        : [Object.values(country.languages).join(", ")],
   } as CountryInfo;
   return currentCountry;
 }
