@@ -1,3 +1,4 @@
+import UndrawWinners from "../../assets/images/UndrawWinners";
 import { BaseCard } from "../../components/BaseCard";
 import "./styles.css";
 
@@ -11,7 +12,7 @@ export function ResultCard(props: Props) {
   return (
     <BaseCard title={props.title} className="result-card">
       <div className="result-image">
-        <img src="src/assets/images/undraw_winners.svg" alt="Winners" />
+        <UndrawWinners />
       </div>
       <div className="result-container">
         <h2>Results</h2>

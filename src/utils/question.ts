@@ -1,4 +1,4 @@
-import { CountryInfo } from "Types";
+import { CountryInfo } from "../Types";
 import { Region } from "./request";
 
 const QuestionSet = [

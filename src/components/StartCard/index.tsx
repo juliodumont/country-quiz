@@ -1,3 +1,4 @@
+import UndrawAdventure from "../../assets/images/UndrawAdventure";
 import { BaseCard } from "../../components/BaseCard";
 import "./styles.css";
 
@@ -15,7 +16,7 @@ export function StartCard(props: Props) {
   return (
     <BaseCard className="start-card" title={props.title}>
       <div className="quiz-image">
-        <img src="./src/assets/images/undraw_adventure.svg" alt="Adventure" />
+        <UndrawAdventure />
       </div>
       {props.userMessage && (
         <div className="user-message">
@@ -28,11 +29,10 @@ export function StartCard(props: Props) {
             {props.options.map((region) => {
               return (
                 <div
-                  className={`button-container disabled-${
-                    props.active[
-                      region.toLowerCase() as keyof typeof props.active
+                  className={`button-container disabled-${props.active[
+                    region.toLowerCase() as keyof typeof props.active
                     ]
-                  }`}
+                    }`}
                   key={region}
                 >
                   <button

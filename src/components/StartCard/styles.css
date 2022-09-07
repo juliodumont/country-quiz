@@ -45,7 +45,7 @@
   top: -50px;
 }
 
-.quiz-image img{
+.quiz-image svg {
   width: 120px;
 }
 
@@ -60,7 +60,7 @@
     padding: 49px 20px 33px 20px;
   }
 
-  .quiz-image img{
+  .quiz-image svg {
     width: 130px;
   }
 
@@ -81,7 +81,6 @@
     margin-bottom: 40px;
   }
 }
-
 
 @media screen and (min-width: 768px) {
   .start-card {
@@ -112,7 +111,7 @@
     height: 542px;
   }
 
-  .quiz-image img{
+  .quiz-image svg {
     width: 150px;
   }
 
@@ -146,5 +145,4 @@
   .regions-options-container {
     gap: 10px;
   }
-
 }

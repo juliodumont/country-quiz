@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CountryApiType, CountryInfo } from "Types";
+import { CountryApiType, CountryInfo } from "../Types";
 
 const BASE_URL = "https://restcountries.com/v3.1/";
 

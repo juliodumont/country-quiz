@@ -1,3 +1,4 @@
+import UndrawAdventure from "../../assets/images/UndrawAdventure";
 import { BaseCard } from "../../components/BaseCard";
 import { QuestionAnswer } from "./QuestionAnswer";
 import "./styles.css";
@@ -20,7 +21,7 @@ export function QuizCard(props: Props) {
   return (
     <BaseCard title={props.title} className="quiz-card">
       <div className="quiz-image">
-        <img src="./src/assets/images/undraw_adventure.svg" alt="Adventure" />
+        <UndrawAdventure />
       </div>
       <div className="additional-info">
         {props.additionalInfo && (
